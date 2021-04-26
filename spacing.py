@@ -146,21 +146,27 @@ def get_orders_txt(file_path):
     return orders
 
 if __name__ == '__main__':
-        
+    # import orders and initialize statespace        
     orders = get_orders_txt('orders.txt')
     ss = create_state_space(orders)
 
-    # now find best layout
-    num_iters = 100
+    # keep track of scores and layouts
     scores = []
     planes = []
-    ss = create_state_space(orders)
+
+    # now find best layout
+    num_iters = 100
     for i in range(num_iters):
+        # generate a random state space
         perm_ss = perm_state_space(ss)
+        # convert state space to plane layout
         plane = state_space_to_plane(perm_ss)
+        # add to set of tested layouts
         planes.append(plane)
+        # # calculate score and add to list of scores
         scores.append(get_plane_score(plane))
 
+    # find best score (max because we are maximizing total distance)
     best = np.argmax(scores)
     best_plane = planes[best]
     best_score = scores[best]
